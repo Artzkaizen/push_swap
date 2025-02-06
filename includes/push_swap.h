@@ -12,9 +12,26 @@
 
 typedef int t_bool;
 
+typedef struct s_stack
+{
+	int *tab;
+	int size;
+} t_stack;
+
+typedef struct s_tabs
+{
+	t_stack a;
+	t_stack b;
+} t_tabs;
+
+void free_tabs(t_tabs *tabs);
+t_tabs *create_tabs(char **str);
+void print_tabs(t_tabs *tabs, int size);
+
+// utils
 int	ft_isspace(char c);
-int	ft_isalnum(char *c);
-long	ft_atoi(const char *str);
+int	ft_isnumeric(char *c);
+long	ft_atol(const char *str);
 size_t	ft_strlen(const char *str);
 int	ft_printf(const char *str, ...);
 char	**ft_split(char *str, char sep);

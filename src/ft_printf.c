@@ -28,7 +28,7 @@ size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-int	ft_putnbr_base_ul(unsigned long long num, char *base)
+static int	ft_putnbr_base_ul(unsigned long long num, char *base)
 {
 	int			radix;
 	static int	count;

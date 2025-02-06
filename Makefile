@@ -14,6 +14,7 @@ SRCS            := push_swap.c \
 				   ft_split.c \
 				   ft_printf.c \
 				   ft_atoi.c \
+				   stack.c \
 				   ft_printf_utils.c \
 
 SRCS		:= $(SRCS:%=$(SRC_DIR)/%)
@@ -24,7 +25,7 @@ BONUS		:= push_swap.c
 # Compiler and flags
 CC              := cc
 CFLAGS          := -Wall -Wextra -Werror -I $(INC_DIR)
-DEBUG           := -g -fsanitize=leak
+DEBUG           := -g3
 
 
 # Clean command
@@ -32,12 +33,14 @@ RM              := rm -f
 
 all: $(NAME)
 
+algo: $(NAME)
+	./$(NAME) $(ARGS)
 # Run tests
 test: $(TARGET)
 	./$(TARGET)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_DIR)
