@@ -1,48 +1,107 @@
 #include "push_swap.h"
 
-// MOVES 
-// sa : swap a - swap the first 2 elements at the top of stack a. Do nothing if there is only one or no elements).
-// sb : swap b - swap the first 2 elements at the top of stack b. Do nothing if there is only one or no elements).
-// ss : sa and sb at the same time.
-// pa : push a - take the first element at the top of b and put it at the top of a. Do nothing if b is empty.
-// pb : push b - take the first element at the top of a and put it at the top of b. Do nothing if a is empty.
 
-// ra : rotate a - shift up all elements of stack a by 1. The first element becomes the last one.
-// rb : rotate b - shift up all elements of stack b by 1. The first element becomes the last one.
-// rr : ra and rb at the same time.
-// rra : reverse rotate a - shift down all elements of stack a by 1. The last element becomes the first one.
-// rrb : reverse rotate b - shift down all elements of stack b by 1. The last element becomes the first one.
-// rrr : rra and rrb at the same time.
-
-t_bool validate_stack(t_stack *stack)
+t_bool is_sorted(t_stack *stack, t_sort_order order)
 {
-	int i;
-	int j;
+	t_node *next;
+	t_node *current;
 
-	i = 0;
-	j = 0;
-	while (i < stack->size)
+	if (!stack)
+		return (FALSE);
+	current = stack->head;
+	if (!current)
+		return (FALSE);
+	while (current && current->next != stack->head)
 	{
-		j = 0;
-		while (j < stack->size)
+		next = current->next;
+		while (next)
 		{
-			if (i != j && stack->tab[i] == stack->tab[j])
+			if (order == ASCENDING && current->value > next->value)
+					return (FALSE);
+			else if(order == DESCENDING && current->value < next->value)
 				return (FALSE);
-			j++;
+			next = next->next;
+			if (next == stack->head)
+				break;
 		}
-		i++;
+		current = current->next;
+			if (current == stack->head)
+				break;
 	}
 	return (TRUE);
 }
 
-/*
-* Fill a stack with a string array
-* @param *stack: the stack to fill
-* @param **str: an array of strings
-* @param tab_size: the size of the string array
-* @return TRUE: if the stack is filled
-* @return FALSE: if the stack is invalid
-*/
+t_bool validate_stack(t_stack *stack)
+{
+	t_node *tmp;
+	t_node *current;
+
+	if (!stack)
+		return (FALSE);
+	current = stack->head;
+	while (current)
+	{
+		tmp = current;
+		while (tmp)
+		{
+			if (tmp != current && tmp->value == current->value)
+				return (FALSE);
+			tmp = current->next;
+		}
+		current = current->next;
+	}
+	return (TRUE);
+}
+
+
+
+t_bool ft_add_node(t_node **list, int value, t_node *new)
+{
+    t_node *last;
+    t_node *new_node;
+
+	if (new)
+		new_node = new;
+	else
+    new_node = (t_node *)malloc(sizeof(t_node));
+    if (!new_node)
+        return (FALSE);
+    new_node->value = value;
+    if (!*list)
+    {
+        *list = new_node;
+        new_node->next = new_node;
+        new_node->prev = new_node;
+    }
+    else
+    {
+        last = (*list)->prev;
+
+        last->next = new_node;
+        new_node->prev = last;
+        new_node->next = *list;
+		(*list)->prev = new_node;
+    }
+    return (TRUE);
+}
+
+void free_stack(t_stack *stack)
+{
+	t_node *tmp;
+	t_node *current;
+
+	if (!stack)
+		return;
+	current = stack->head;
+	while (current)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+	free(stack);
+}
+
 t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 {
 	int idx;
@@ -50,25 +109,25 @@ t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 
 	idx = 0;
 	tmp = 0;
-
-	if (tab_size < 1)
-		return (FALSE);
-	stack->tab = (int *)malloc(sizeof(int) * tab_size);
-	if (!stack->tab)
+	if (tab_size < 1 || !stack)
 		return (FALSE);
 	if (!str)
 		return(stack->size = idx, TRUE);
 	while (idx < tab_size)
 	{
 		if (!ft_isnumeric(str[idx]))
-		{
-			return (free(stack->tab), FALSE);
-
-		}
+			return (free_stack(stack), FALSE);
 		tmp = ft_atol(str[idx]);
 		if (tmp > INT_MAX || tmp < INT_MIN)
-			return (free(stack->tab), FALSE);
-		stack->tab[idx] = (int)tmp;
+			return (free_stack(stack), FALSE);
+		if (!idx)
+			(stack->min = (int)tmp, stack->max = (int)tmp);
+		if(!ft_add_node(&stack->head, (int)tmp, NULL))
+			return (free_stack(stack), FALSE);
+		if (stack->max < (int)tmp)
+			stack->max = (int)tmp;
+		if (stack->min > (int)tmp)
+			stack->min = (int)tmp;
 		idx++;
 		stack->size = idx;
 	}
@@ -76,61 +135,90 @@ t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 }
 
 
-/*
-* Create a stack from a string array
-* @param **str: array of strings
-* @return t_tabs: a struct containing two stacks
-* @return NULL: if the stack is invalid
-*/
-t_tabs *create_tabs(char **str)
+
+void move_stack(t_tabs *tabs, t_stack_move move)
 {
-	int len;
-    t_tabs *tabs;
+	t_node *head;
+	t_node *second;
 
-
-	len = 0;
-    tabs = (t_tabs *)malloc(sizeof(t_tabs));
-    if (!tabs)
-        return (NULL);
-	while (str[len])
-		len++;
-	if (!(fill_stack(&tabs->a, str, len) && fill_stack(&tabs->b, NULL, len)))
-		return (free(tabs), NULL);
-	if (!(validate_stack(&tabs->a) && validate_stack(&tabs->b)))
-		return (free_tabs(tabs), NULL);
-	print_tabs(tabs, len);
-	return (tabs);
-}
-
-/*
-* Print the stack
-* @param *stack: the stack to print
-*/
-void print_tabs(t_tabs *tabs, int size)
-{
-	int i;
-
-	i = 0;
-	ft_printf("stack a\t\tstack b\n");
-	ft_printf("-------\t\t-------\n");
-	while (i < size)
+	if (move == SA)
 	{
-		if (i < tabs->a.size)
-			ft_printf("a:[%d]\t\t", tabs->a.tab[i]);
-		else
-			ft_printf("a:[ ]\t\t");
-		if (i < tabs->b.size)
-			ft_printf("b:[%d]\n", tabs->b.tab[i]);
-		else
-			ft_printf("b:[ ]\n");
+		head = tabs->a.head;
+		second = head->next;
 
-		i++;
+		head->next = second->next;
+		second->next->prev = head;
+		second->next = head;
+		second->prev = head->prev;
+		head->prev->next = second;
+		head->prev = second;
+
+		tabs->a.head = second;
+		ft_printf("sa\n");
 	}
-}
+	else if (move == SB)
+	{
+		// current = tabs->a.head;
+		tabs->a.head = tabs->a.head->next;
+		ft_printf("sb\n");
+	}
+	else if (move == SS)
+	{
+		// swap the top two elements of both stacks
+	}
+	else if (move == PA)
+	{
+		// push the top element of stack b to stack a
+		tabs->a.head = tabs->b.head;
+		tabs->b.head = tabs->b.head->next;
+		ft_printf("pa\n");
+	}
+	else if (move == PB)
+	{
+		// push the top element of stack a to stack b
+		tabs->b.head = tabs->a.head;
+		tabs->b.size++;
 
-void free_tabs(t_tabs *tabs)
-{
-    free(tabs->a.tab);
-    free(tabs->b.tab);
-    free(tabs);
+
+		tabs->a.head->prev->next = tabs->a.head->next;
+		tabs->a.head->next->prev = tabs->a.head->prev;
+		tabs->a.head = tabs->a.head->next;
+
+		tabs->b.head->next = tabs->b.head;
+		tabs->b.head->prev = tabs->b.head;
+		tabs->a.size--;
+		ft_printf("pb\n");
+	}
+	else if (move == RA)
+	{
+		// rotate stack a
+		tabs->a.head = tabs->a.head->next;
+
+		ft_printf("ra\n");
+	}
+	else if (move == RB)
+	{
+		// rotate stack b
+	}
+	else if (move == RR)
+	{
+		// rotate both stacks
+	}
+	else if (move == RRA)
+	{
+		tabs->a.head = tabs->a.head->prev;
+		ft_printf("rra\n");
+	}
+	else if (move == RRB)
+	{
+		// reverse rotate stack b
+	}
+	else if (move == RRR)
+	{
+		// reverse rotate both stacks
+	}
+	{
+		/* code */
+	}
+	
 }
