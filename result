@@ -1,0 +1,86 @@
+stack 		stack b
+-------		-------
+a:[2323]	b:[ ]
+a:[32]		b:[ ]
+a:[42]		b:[ ]
+a:[34]		b:[ ]
+a:[234]		b:[ ]
+a:[23]		b:[ ]
+a:[4]		b:[ ]
+-------		-------
+A = Size: 7	Min: 4	Max: 2323
+B = Size: 0	Min: 0	Max: 0
+
+
+sorting stack
+
+rra
+stack 		stack b
+-------		-------
+a:[4]		b:[ ]
+a:[2323]	b:[ ]
+a:[32]		b:[ ]
+a:[42]		b:[ ]
+a:[34]		b:[ ]
+a:[234]		b:[ ]
+a:[23]		b:[ ]
+-------		-------
+A = Size: 7	Min: 4	Max: 2323
+B = Size: 0	Min: 0	Max: 0
+pb
+stack 		stack b
+-------		-------
+a:[2323]	b:[4]
+a:[32]		b:[ ]
+a:[42]		b:[ ]
+a:[34]		b:[ ]
+a:[234]		b:[ ]
+a:[23]		b:[ ]
+-------		-------
+A = Size: 6	Min: 4	Max: 2323
+B = Size: 1	Min: 0	Max: 0
+pb
+stack 		stack b
+-------		-------
+a:[32]		b:[2323]
+a:[42]		b:[4]
+a:[34]		b:[ ]
+a:[234]		b:[ ]
+a:[23]		b:[ ]
+-------		-------
+A = Size: 5	Min: 4	Max: 2323
+B = Size: 2	Min: 0	Max: 0
+pb
+stack 		stack b
+-------		-------
+a:[42]		b:[32]
+a:[34]		b:[2323]
+a:[234]		b:[4]
+a:[23]		b:[ ]
+-------		-------
+A = Size: 4	Min: 4	Max: 2323
+B = Size: 3	Min: 0	Max: 0
+pb
+stack 		stack b
+-------		-------
+a:[34]		b:[42]
+a:[234]		b:[32]
+a:[23]		b:[2323]
+-------		-------
+A = Size: 3	Min: 4	Max: 2323
+B = Size: 4	Min: 0	Max: 0
+pb
+stack 		stack b
+-------		-------
+a:[234]		b:[34]
+a:[23]		b:[42]
+-------		-------
+A = Size: 2	Min: 4	Max: 2323
+B = Size: 5	Min: 0	Max: 0
+stack 		stack b
+-------		-------
+a:[234]		b:[34]
+a:[23]		b:[42]
+-------		-------
+A = Size: 2	Min: 4	Max: 2323
+B = Size: 5	Min: 0	Max: 0

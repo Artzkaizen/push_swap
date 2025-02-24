@@ -3,7 +3,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 #define TRUE 1
 #define FALSE 0

@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "../includes/push_swap.h"
 
 
 t_bool is_sorted(t_stack *stack, t_sort_order order)
@@ -138,87 +138,258 @@ t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 
 void move_stack(t_tabs *tabs, t_stack_move move)
 {
-	t_node *head;
-	t_node *second;
+    t_node *head;
+    t_node *second;
+    t_node *tmp;
 
-	if (move == SA)
-	{
-		head = tabs->a.head;
-		second = head->next;
+    if (move == SA)
+    {
+        ft_printf("Stack head: (%d)\n", tabs->a.head->value);
+        head = tabs->a.head;
+        second = head->next;
+        // Perform the swap
+        head->next = second->next;
+        second->next->prev = head;
+        second->next = head;
+        second->prev = head->prev;
+        head->prev->next = second;
+        head->prev = second;
 
-		head->next = second->next;
-		second->next->prev = head;
-		second->next = head;
-		second->prev = head->prev;
-		head->prev->next = second;
-		head->prev = second;
+        tabs->a.head = second;
+        ft_printf("sa\n");
+    }
+    else if (move == SB)
+    {
+        // swap stack b
+        t_node *first = tabs->b.head;
+        t_node *second = first->next;
+        first->next = second->next;
+        second->next->prev = first;
+        second->next = first;
+        second->prev = first->prev;
+        first->prev->next = second;
+        first->prev = second;
+        tabs->b.head = second;
+        ft_printf("sb\n");
+    }
+    else if (move == SS)
+    {
+        // swap both stacks
+        move_stack(tabs, SA);
+        move_stack(tabs, SB);
+        ft_printf("ss\n");
+    }
+    else if (move == PA)
+    {
+        tmp = tabs->b.head;
+        if (!tmp)
+            return;
+        // Move top of stack B to top of stack A
+        tabs->b.head = tmp->next;
+        tmp->next->prev = tmp->prev;
+        tmp->prev->next = tmp->next;
 
-		tabs->a.head = second;
-		ft_printf("sa\n");
-	}
-	else if (move == SB)
-	{
-		// current = tabs->a.head;
-		tabs->a.head = tabs->a.head->next;
-		ft_printf("sb\n");
-	}
-	else if (move == SS)
-	{
-		// swap the top two elements of both stacks
-	}
-	else if (move == PA)
-	{
-		// push the top element of stack b to stack a
-		tabs->a.head = tabs->b.head;
-		tabs->b.head = tabs->b.head->next;
-		ft_printf("pa\n");
-	}
-	else if (move == PB)
-	{
-		// push the top element of stack a to stack b
-		tabs->b.head = tabs->a.head;
-		tabs->b.size++;
+        if (tabs->a.head)
+        {
+            tmp->next = tabs->a.head;
+            tabs->a.head->prev = tmp;
+        }
+        else
+        {
+            tmp->next = tmp;
+            tmp->prev = tmp;
+        }
+        tabs->a.head = tmp;
+        tabs->a.size++;  // Increase the size of stack A
+        tabs->b.size--;  // Decrease the size of stack B
+        ft_printf("pa\n");
+    }
+    else if (move == PB)
+    {
+        tmp = tabs->a.head;
+        if (!tmp)
+            return;
+        // Move top of stack A to top of stack B
+        tabs->a.head = tmp->next;
+        tmp->next->prev = tmp->prev;
+        tmp->prev->next = tmp->next;
 
-
-		tabs->a.head->prev->next = tabs->a.head->next;
-		tabs->a.head->next->prev = tabs->a.head->prev;
-		tabs->a.head = tabs->a.head->next;
-
-		tabs->b.head->next = tabs->b.head;
-		tabs->b.head->prev = tabs->b.head;
-		tabs->a.size--;
-		ft_printf("pb\n");
-	}
-	else if (move == RA)
-	{
-		// rotate stack a
-		tabs->a.head = tabs->a.head->next;
-
-		ft_printf("ra\n");
-	}
-	else if (move == RB)
-	{
-		// rotate stack b
-	}
-	else if (move == RR)
-	{
-		// rotate both stacks
-	}
-	else if (move == RRA)
-	{
-		tabs->a.head = tabs->a.head->prev;
-		ft_printf("rra\n");
-	}
-	else if (move == RRB)
-	{
-		// reverse rotate stack b
-	}
-	else if (move == RRR)
-	{
-		// reverse rotate both stacks
-	}
-	{
-		/* code */
-	}
-	
+        if (tabs->b.head)
+        {
+            tmp->next = tabs->b.head;
+            tabs->b.head->prev = tmp;
+        }
+        else
+        {
+            tmp->next = tmp;
+            tmp->prev = tmp;
+        }
+        tabs->b.head = tmp;
+        tabs->b.size++;  // Increase the size of stack B
+        tabs->a.size--;  // Decrease the size of stack A
+        ft_printf("pb\n");
+    }
+    else if (move == RA)
+    {
+        // Rotate stack A
+        if (tabs->a.head)
+            tabs->a.head = tabs->a.head->next;
+        ft_printf("ra\n");
+    }
+    else if (move == RB)
+    {
+        // Rotate stack B
+        if (tabs->b.head)
+            tabs->b.head = tabs->b.head->next;
+        ft_printf("rb\n");
+    }
+    else if (move == RRA)
+    {
+        // Reverse rotate stack A
+        if (tabs->a.head)
+            tabs->a.head = tabs->a.head->prev;
+        ft_printf("rra\n");
+    }
+    else if (move == RRB)
+    {
+        // Reverse rotate stack B
+        if (tabs->b.head)
+            tabs->b.head = tabs->b.head->prev;
+        ft_printf("rrb\n");
+    }
+    else if (move == RR)
+    {
+        // Rotate both stacks
+        move_stack(tabs, RA);
+        move_stack(tabs, RB);
+        ft_printf("rr\n");
+    }
+    else if (move == RRR)
+    {
+        // Reverse rotate both stacks
+        move_stack(tabs, RRA);
+        move_stack(tabs, RRB);
+        ft_printf("rrr\n");
+    }
 }
+
+
+// void move_stack(t_tabs *tabs, t_stack_move move)
+// {
+// 	t_node *head;
+// 	t_node *second;
+
+// 	if (move == SA)
+// 	{
+// 		ft_printf("Stack head: (%d)\n", tabs->a.head->value);
+
+// 		head = tabs->a.head;
+// 		second = head->next;
+
+// 		head->next = second->next;
+// 		second->next->prev = head;
+// 		second->next = head;
+// 		second->prev = head->prev;
+// 		head->prev->next = second;
+// 		head->prev = second;
+
+// 		tabs->a.head = second;
+// 		ft_printf("Stack head: (%d)\n", tabs->a.head->value);
+
+// 		ft_printf("sa\n");
+// 	}
+// 	else if (move == SB)
+// 	{
+// 		// current = tabs->a.head;
+// 		tabs->a.head = tabs->a.head->next;
+// 		ft_printf("sb\n");
+// 	}
+// 	else if (move == SS)
+// 	{
+// 		// swap the top two elements of both stacks
+// 	}
+// 	else if (move == PA)
+// 	{
+// 		// push the top element of stack b to stack a
+// 		tabs->a.head = tabs->b.head;
+// 		tabs->b.head = tabs->b.head->next;
+// 		ft_printf("pa\n");
+// 	}
+// 	else if (move == PB)
+// 	{
+// 		t_node *tmp = tabs->a.head->next;
+// 		t_node *head = tabs->a.head;
+
+// 		tabs->a.head->next->prev = tabs->a.head->prev;
+// 		tabs->a.head->prev->next = tabs->a.head->next;
+
+// 		if (!tabs->b.head)
+// 		{
+// 			head->next = head;
+// 			head->prev = head;
+// 		}
+// 		else 
+// 		{
+
+// 			head->next = tabs->b.head;
+// 			tabs->b.head->prev = head;
+// 			// head->next = tabs->b.head;
+// 			// head->prev = tabs->b.head;
+// 			// tabs->b.head->prev = head;
+// 		}
+		
+		
+
+
+
+// 		tabs->b.head = head;
+
+// 		ft_printf("Stack head B: (%d)\n  ", tabs->b.head->value);
+// 		ft_printf("Stack head B: (%d)\n  ", tabs->b.head->value);
+		
+
+// 		tabs->b.head->next = tabs->b.head;
+// 		tabs->b.head->prev = tabs->b.head;
+
+// 		tabs->a.head = tmp;
+
+	
+// 		ft_printf("pb\n");
+// 	}
+// 	else if (move == RA)
+// 	{
+// 		// rotate stack a
+// 		tabs->a.head = tabs->a.head->next;
+
+// 		ft_printf("ra\n");
+// 	}
+// 	else if (move == RB)
+// 	{
+// 		// rotate stack b
+// 	}
+// 	else if (move == RR)
+// 	{
+// 		// rotate both stacks
+// 	}
+// 	else if (move == RRA)
+// 	{
+// 		ft_printf("Stack head: (%d)\n", tabs->a.head->value);
+
+// 		tabs->a.head = tabs->a.head->prev;
+// 		ft_printf("Stack head: (%d)\n", tabs->a.head->value);
+
+// 		ft_printf("rra\n");
+// 	}
+// 	else if (move == RRB)
+// 	{
+// 		// reverse rotate stack b
+// 	}
+// 	else if (move == RRR)
+// 	{
+// 		// reverse rotate both stacks
+// 	}
+// 	{
+// 		/* code */
+// 	}
+	
+// }

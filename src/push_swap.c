@@ -1,5 +1,5 @@
-#include "push_swap.h"
-#include "ft_printf.h"
+#include "../includes/push_swap.h"
+#include "../includes/ft_printf.h"
 
 /*
 * Print the stack
@@ -73,7 +73,7 @@ t_tabs *create_tabs(char **str)
 	len = 0;
     tabs = (t_tabs *)malloc(sizeof(t_tabs));
     if (!tabs)
-        return (NULL);
+		return (NULL);
 	while (str[len])
 		len++;
 	if (!(fill_stack(&tabs->a, str, len) && fill_stack(&tabs->b, NULL, len)))
@@ -101,27 +101,50 @@ void push_swap(t_tabs *tabs, t_sort_order order)
 	}
 	if(tabs->a.size == 3 && !is_sorted(&tabs->a, ASCENDING))
 	{
-		if (top->value == tabs->a.max)
-			move_stack(tabs, RA);
-		if (top->value == tabs->a.min && top->next->value == tabs->a.max)
-			move_stack(tabs, SA);
-		if (!is_sorted(&tabs->a, ASCENDING))
-			push_swap(tabs, order);
+		// if (top->value == tabs->a.max)
+		// 	move_stack(tabs, RA);
+		// if (top->value == tabs->a.min && top->next->value == tabs->a.max)
+		// 	move_stack(tabs, SA);
+		// if (!is_sorted(&tabs->a, ASCENDING))
+		// 	push_swap(tabs, order);
 	}
 	else 
 	{
 		if (top->value > top->next->value)
-			move_stack(tabs, SA);
-		if (top->value > top->next->value)
-			move_stack(tabs, RRA);
-		while(top->value < top->next->value)
 		{
-			ft_printf("top: %d\tnext: %d\n", top->value, top->next->value);
+			if (top->prev->value < top->value)
+				move_stack(tabs, RRA);
+			print_tabs(tabs);
 			move_stack(tabs, PB);
-			top = tabs->a.head->next;
+			print_tabs(tabs);
+			move_stack(tabs, PB);
+			
+			print_tabs(tabs);
+			move_stack(tabs, PB);
+			print_tabs(tabs);
+			move_stack(tabs, PB);
+			print_tabs(tabs);
+			move_stack(tabs, PB);
+			print_tabs(tabs);
+			// move_stack(tabs, PB);
+			// if (!is_sorted(&tabs->a, ASCENDING))
+			// {
+			// 	push_swap(tabs, ASCENDING);
+			// }
+			
 		}
-		if (top->value > top->prev->value)
-			move_stack(tabs, RRA);
+		// if (top->value > top->next->value)
+		// 	move_stack(tabs, SA);
+		// if (top->value > top->next->value)
+		// 	move_stack(tabs, RRA);
+		// while(top->value < top->next->value)
+		// {
+		// 	ft_printf("top: %d\tnext: %d\n", top->value, top->next->value);
+		// 	move_stack(tabs, PB);
+		// 	top = tabs->a.head->next;
+		// }
+		// if (top->value > top->prev->value)
+		// 	move_stack(tabs, RRA);
 		// if (!is_sorted(&tabs->a, ASCENDING))
 		// 	push_swap(tabs, order);
 	}
@@ -134,12 +157,20 @@ int	 main(int argc, char **argv)
 	t_tabs *tabs;
 	t_sort_order order;
 
-	if (argc == 1)
-		return (0);
-	if (argc == 2)
-		tabs= create_tabs(ft_split(argv[1], ' '));
-	else
-		tabs = create_tabs(argv + 1);
+	(void)argv;
+	(void)argc;
+
+	char *arr = "2323 32 42 34 234 23 4";
+
+	// if (argc == 1)
+	// 	return (0);
+	// if (argc == 2)
+	// 	tabs= create_tabs(ft_split(argv[1], ' '));
+	// else
+	// 	tabs = create_tabs(argv + 1);
+
+	tabs = create_tabs(ft_split(arr, ' '));
+
 	if (!tabs)
 		return (ft_printf("Error\n"), EXIT_FAILURE);
 	if (tabs->a.head->value > tabs->a.head->next->value)
