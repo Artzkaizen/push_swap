@@ -39,17 +39,19 @@ t_bool validate_stack(t_stack *stack)
 	if (!stack)
 		return (FALSE);
 	current = stack->head;
-	while (current)
+	while (current && current->next != stack->head)
 	{
 		tmp = current;
-		while (tmp)
-		{
-			if (tmp != current && tmp->value == current->value)
-				return (FALSE);
-			tmp = current->next;
-		}
+        tmp = current->next;
+        while (tmp && tmp != stack->head)
+        {
+            if (tmp->value == current->value)
+                return (FALSE);
+            tmp = tmp->next;
+        }
 		current = current->next;
 	}
+
 	return (TRUE);
 }
 
@@ -131,6 +133,8 @@ t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 		idx++;
 		stack->size = idx;
 	}
+    if(!validate_stack(stack))
+        return (FALSE);
 	return (TRUE);
 }
 
@@ -142,131 +146,177 @@ void move_stack(t_tabs *tabs, t_stack_move move)
     t_node *second;
     t_node *tmp;
 
-    if (move == SA)
+    if (move == SA && tabs->a.size >= 2)
     {
-        ft_printf("Stack head: (%d)\n", tabs->a.head->value);
         head = tabs->a.head;
         second = head->next;
-        // Perform the swap
         head->next = second->next;
         second->next->prev = head;
         second->next = head;
         second->prev = head->prev;
         head->prev->next = second;
         head->prev = second;
-
         tabs->a.head = second;
         ft_printf("sa\n");
     }
-    else if (move == SB)
+    else if (move == SB && tabs->b.size >= 2)
     {
-        // swap stack b
-        t_node *first = tabs->b.head;
-        t_node *second = first->next;
-        first->next = second->next;
-        second->next->prev = first;
-        second->next = first;
-        second->prev = first->prev;
-        first->prev->next = second;
-        first->prev = second;
+        head = tabs->b.head;
+        second = head->next;
+        head->next = second->next;
+        second->next->prev = head;
+        second->next = head;
+        second->prev = head->prev;
+        head->prev->next = second;
+        head->prev = second;
         tabs->b.head = second;
         ft_printf("sb\n");
     }
     else if (move == SS)
     {
-        // swap both stacks
         move_stack(tabs, SA);
         move_stack(tabs, SB);
         ft_printf("ss\n");
     }
-    else if (move == PA)
+    else if (move == PA && tabs->b.size > 0)
     {
         tmp = tabs->b.head;
-        if (!tmp)
-            return;
-        // Move top of stack B to top of stack A
-        tabs->b.head = tmp->next;
-        tmp->next->prev = tmp->prev;
-        tmp->prev->next = tmp->next;
+        if (tabs->b.size == 1)
+        {
+            tabs->b.head = NULL;
+            tabs->b.min = 0;
+            tabs->b.max = 0;
+        }
+        else
+        {
+            tabs->b.head = tmp->next;
+            tmp->next->prev = tmp->prev;
+            tmp->prev->next = tmp->next;
+            
+            // Update min/max for stack B after removal
+            if (tmp->value == tabs->b.min || tmp->value == tabs->b.max)
+            {
+                t_node *current = tabs->b.head;
+                tabs->b.min = current->value;
+                tabs->b.max = current->value;
+                do {
+                    if (current->value < tabs->b.min)
+                        tabs->b.min = current->value;
+                    if (current->value > tabs->b.max)
+                        tabs->b.max = current->value;
+                    current = current->next;
+                } while (current != tabs->b.head);
+            }
+        }
 
-        if (tabs->a.head)
+        if (!tabs->a.head)
+        {
+            tabs->a.head = tmp;
+            tmp->next = tmp;
+            tmp->prev = tmp;
+        }
+        else
         {
             tmp->next = tabs->a.head;
+            tmp->prev = tabs->a.head->prev;
+            tabs->a.head->prev->next = tmp;
             tabs->a.head->prev = tmp;
+            tabs->a.head = tmp;
         }
-        else
-        {
-            tmp->next = tmp;
-            tmp->prev = tmp;
-        }
-        tabs->a.head = tmp;
-        tabs->a.size++;  // Increase the size of stack A
-        tabs->b.size--;  // Decrease the size of stack B
+        tabs->a.size++;
+        tabs->b.size--;
+
+        // Update min/max values for stack A
+        if (tmp->value < tabs->a.min)
+            tabs->a.min = tmp->value;
+        if (tmp->value > tabs->a.max)
+            tabs->a.max = tmp->value;
+
         ft_printf("pa\n");
     }
-    else if (move == PB)
+    else if (move == PB && tabs->a.size > 0)
     {
         tmp = tabs->a.head;
-        if (!tmp)
-            return;
-        // Move top of stack A to top of stack B
-        tabs->a.head = tmp->next;
-        tmp->next->prev = tmp->prev;
-        tmp->prev->next = tmp->next;
-
-        if (tabs->b.head)
+        if (tabs->a.size == 1)
         {
-            tmp->next = tabs->b.head;
-            tabs->b.head->prev = tmp;
+            tabs->a.head = NULL;
+            tabs->a.min = 0;
+            tabs->a.max = 0;
         }
         else
         {
+            tabs->a.head = tmp->next;
+            tmp->next->prev = tmp->prev;
+            tmp->prev->next = tmp->next;
+            
+            // Update min/max for stack A after removal
+            if (tmp->value == tabs->a.min || tmp->value == tabs->a.max)
+            {
+                t_node *current = tabs->a.head;
+                tabs->a.min = current->value;
+                tabs->a.max = current->value;
+                do {
+                    if (current->value < tabs->a.min)
+                        tabs->a.min = current->value;
+                    if (current->value > tabs->a.max)
+                        tabs->a.max = current->value;
+                    current = current->next;
+                } while (current != tabs->a.head);
+            }
+        }
+
+        if (!tabs->b.head)
+        {
+            tabs->b.head = tmp;
             tmp->next = tmp;
             tmp->prev = tmp;
+            tabs->b.min = tmp->value;
+            tabs->b.max = tmp->value;
         }
-        tabs->b.head = tmp;
-        tabs->b.size++;  // Increase the size of stack B
-        tabs->a.size--;  // Decrease the size of stack A
+        else
+        {
+            tmp->next = tabs->b.head;
+            tmp->prev = tabs->b.head->prev;
+            tabs->b.head->prev->next = tmp;
+            tabs->b.head->prev = tmp;
+            tabs->b.head = tmp;
+            if (tmp->value < tabs->b.min)
+                tabs->b.min = tmp->value;
+            if (tmp->value > tabs->b.max)
+                tabs->b.max = tmp->value;
+        }
+        tabs->b.size++;
+        tabs->a.size--;
         ft_printf("pb\n");
     }
-    else if (move == RA)
+    else if (move == RA && tabs->a.size > 1)
     {
-        // Rotate stack A
-        if (tabs->a.head)
-            tabs->a.head = tabs->a.head->next;
+        tabs->a.head = tabs->a.head->next;
         ft_printf("ra\n");
     }
-    else if (move == RB)
+    else if (move == RB && tabs->b.size > 1)
     {
-        // Rotate stack B
-        if (tabs->b.head)
-            tabs->b.head = tabs->b.head->next;
+        tabs->b.head = tabs->b.head->next;
         ft_printf("rb\n");
-    }
-    else if (move == RRA)
-    {
-        // Reverse rotate stack A
-        if (tabs->a.head)
-            tabs->a.head = tabs->a.head->prev;
-        ft_printf("rra\n");
-    }
-    else if (move == RRB)
-    {
-        // Reverse rotate stack B
-        if (tabs->b.head)
-            tabs->b.head = tabs->b.head->prev;
-        ft_printf("rrb\n");
     }
     else if (move == RR)
     {
-        // Rotate both stacks
         move_stack(tabs, RA);
         move_stack(tabs, RB);
         ft_printf("rr\n");
     }
+    else if (move == RRA && tabs->a.size > 1)
+    {
+        tabs->a.head = tabs->a.head->prev;
+        ft_printf("rra\n");
+    }
+    else if (move == RRB && tabs->b.size > 1)
+    {
+        tabs->b.head = tabs->b.head->prev;
+        ft_printf("rrb\n");
+    }
     else if (move == RRR)
     {
-        // Reverse rotate both stacks
         move_stack(tabs, RRA);
         move_stack(tabs, RRB);
         ft_printf("rrr\n");

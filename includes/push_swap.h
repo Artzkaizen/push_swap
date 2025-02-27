@@ -112,4 +112,8 @@ void free_stack(t_stack *stack);
 void move_stack(t_tabs *tabs, t_stack_move move);
 t_bool ft_add_node(t_node **list, int value, t_node *new);
 
+void push_swap(t_tabs *tabs);
+void print_tabs(t_tabs *tabs);
+void free_tabs(t_tabs *tabs);
+
 #endif //PUSH_SWAP_H
