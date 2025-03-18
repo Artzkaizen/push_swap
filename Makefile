@@ -16,7 +16,6 @@ SRCS            := push_swap.c \
 				   ft_atoi.c \
 				   stack.c \
 				   ft_printf_utils.c \
-				   test.c \
 
 SRCS		:= $(SRCS:%=$(SRC_DIR)/%)
 OBJS		:= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

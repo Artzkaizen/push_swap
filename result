@@ -1,0 +1,1296 @@
+Running push_swap with: 612 253 814 267 115 423 412 956 591 558 613 77 787 984 464 275 812 327 191 670 776 279 929 625 529 857 130 848 903 788 281 791 109 163 418 288 979 206 127 624 121 453 361 694 442 709 824 184 920 778 545 280 102 131 902 234 548 264 802 686 445 665 584 683 357 871 330 532 836 169 779 246 818 93 669 421 276 487 314 534 355 847 417 86 594 767 662 176 599 586 587 353 129 996 375 154 266 604 448 521
+stack a		stack b
+-------		-------
+a:[612]	b:[ ]
+a:[253]	b:[ ]
+a:[814]	b:[ ]
+a:[267]	b:[ ]
+a:[115]	b:[ ]
+a:[423]	b:[ ]
+a:[412]	b:[ ]
+a:[956]	b:[ ]
+a:[591]	b:[ ]
+a:[558]	b:[ ]
+a:[613]	b:[ ]
+a:[77]	b:[ ]
+a:[787]	b:[ ]
+a:[984]	b:[ ]
+a:[464]	b:[ ]
+a:[275]	b:[ ]
+a:[812]	b:[ ]
+a:[327]	b:[ ]
+a:[191]	b:[ ]
+a:[670]	b:[ ]
+a:[776]	b:[ ]
+a:[279]	b:[ ]
+a:[929]	b:[ ]
+a:[625]	b:[ ]
+a:[529]	b:[ ]
+a:[857]	b:[ ]
+a:[130]	b:[ ]
+a:[848]	b:[ ]
+a:[903]	b:[ ]
+a:[788]	b:[ ]
+a:[281]	b:[ ]
+a:[791]	b:[ ]
+a:[109]	b:[ ]
+a:[163]	b:[ ]
+a:[418]	b:[ ]
+a:[288]	b:[ ]
+a:[979]	b:[ ]
+a:[206]	b:[ ]
+a:[127]	b:[ ]
+a:[624]	b:[ ]
+a:[121]	b:[ ]
+a:[453]	b:[ ]
+a:[361]	b:[ ]
+a:[694]	b:[ ]
+a:[442]	b:[ ]
+a:[709]	b:[ ]
+a:[824]	b:[ ]
+a:[184]	b:[ ]
+a:[920]	b:[ ]
+a:[778]	b:[ ]
+a:[545]	b:[ ]
+a:[280]	b:[ ]
+a:[102]	b:[ ]
+a:[131]	b:[ ]
+a:[902]	b:[ ]
+a:[234]	b:[ ]
+a:[548]	b:[ ]
+a:[264]	b:[ ]
+a:[802]	b:[ ]
+a:[686]	b:[ ]
+a:[445]	b:[ ]
+a:[665]	b:[ ]
+a:[584]	b:[ ]
+a:[683]	b:[ ]
+a:[357]	b:[ ]
+a:[871]	b:[ ]
+a:[330]	b:[ ]
+a:[532]	b:[ ]
+a:[836]	b:[ ]
+a:[169]	b:[ ]
+a:[779]	b:[ ]
+a:[246]	b:[ ]
+a:[818]	b:[ ]
+a:[93]	b:[ ]
+a:[669]	b:[ ]
+a:[421]	b:[ ]
+a:[276]	b:[ ]
+a:[487]	b:[ ]
+a:[314]	b:[ ]
+a:[534]	b:[ ]
+a:[355]	b:[ ]
+a:[847]	b:[ ]
+a:[417]	b:[ ]
+a:[86]	b:[ ]
+a:[594]	b:[ ]
+a:[767]	b:[ ]
+a:[662]	b:[ ]
+a:[176]	b:[ ]
+a:[599]	b:[ ]
+a:[586]	b:[ ]
+a:[587]	b:[ ]
+a:[353]	b:[ ]
+a:[129]	b:[ ]
+a:[996]	b:[ ]
+a:[375]	b:[ ]
+a:[154]	b:[ ]
+a:[266]	b:[ ]
+a:[604]	b:[ ]
+a:[448]	b:[ ]
+a:[521]	b:[ ]
+-------		-------
+A = Size: 100	Min: 77	Max: 996
+B = Size: 0	Min: 0	Max: 0
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+ra
+ra
+pb
+ra
+ra
+ra
+pb
+ra
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+ra
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+ra
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+ra
+ra
+pb
+ra
+ra
+ra
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+ra
+ra
+ra
+pb
+ra
+pb
+pb
+pb
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+ra
+ra
+pb
+ra
+ra
+ra
+pb
+ra
+ra
+ra
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+pb
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+ra
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+ra
+ra
+pb
+ra
+pb
+pb
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pb
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+pb
+pb
+pb
+ra
+ra
+ra
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pb
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+ra
+pb
+pb
+ra
+pb
+ra
+pb
+ra
+ra
+pb
+ra
+pb
+pb
+ra
+ra
+pb
+ra
+pb
+ra
+pb
+pb
+ra
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+Total moves: 1084
+stack a		stack b
+-------		-------
+a:[0]	b:[ ]
+a:[1]	b:[ ]
+a:[2]	b:[ ]
+a:[3]	b:[ ]
+a:[4]	b:[ ]
+a:[5]	b:[ ]
+a:[6]	b:[ ]
+a:[7]	b:[ ]
+a:[8]	b:[ ]
+a:[9]	b:[ ]
+a:[10]	b:[ ]
+a:[11]	b:[ ]
+a:[12]	b:[ ]
+a:[13]	b:[ ]
+a:[14]	b:[ ]
+a:[15]	b:[ ]
+a:[16]	b:[ ]
+a:[17]	b:[ ]
+a:[18]	b:[ ]
+a:[19]	b:[ ]
+a:[20]	b:[ ]
+a:[21]	b:[ ]
+a:[22]	b:[ ]
+a:[23]	b:[ ]
+a:[24]	b:[ ]
+a:[25]	b:[ ]
+a:[26]	b:[ ]
+a:[27]	b:[ ]
+a:[28]	b:[ ]
+a:[29]	b:[ ]
+a:[30]	b:[ ]
+a:[31]	b:[ ]
+a:[32]	b:[ ]
+a:[33]	b:[ ]
+a:[34]	b:[ ]
+a:[35]	b:[ ]
+a:[36]	b:[ ]
+a:[37]	b:[ ]
+a:[38]	b:[ ]
+a:[39]	b:[ ]
+a:[40]	b:[ ]
+a:[41]	b:[ ]
+a:[42]	b:[ ]
+a:[43]	b:[ ]
+a:[44]	b:[ ]
+a:[45]	b:[ ]
+a:[46]	b:[ ]
+a:[47]	b:[ ]
+a:[48]	b:[ ]
+a:[49]	b:[ ]
+a:[50]	b:[ ]
+a:[51]	b:[ ]
+a:[52]	b:[ ]
+a:[53]	b:[ ]
+a:[54]	b:[ ]
+a:[55]	b:[ ]
+a:[56]	b:[ ]
+a:[57]	b:[ ]
+a:[58]	b:[ ]
+a:[59]	b:[ ]
+a:[60]	b:[ ]
+a:[61]	b:[ ]
+a:[62]	b:[ ]
+a:[63]	b:[ ]
+a:[64]	b:[ ]
+a:[65]	b:[ ]
+a:[66]	b:[ ]
+a:[67]	b:[ ]
+a:[68]	b:[ ]
+a:[69]	b:[ ]
+a:[70]	b:[ ]
+a:[71]	b:[ ]
+a:[72]	b:[ ]
+a:[73]	b:[ ]
+a:[74]	b:[ ]
+a:[75]	b:[ ]
+a:[76]	b:[ ]
+a:[77]	b:[ ]
+a:[78]	b:[ ]
+a:[79]	b:[ ]
+a:[80]	b:[ ]
+a:[81]	b:[ ]
+a:[82]	b:[ ]
+a:[83]	b:[ ]
+a:[84]	b:[ ]
+a:[85]	b:[ ]
+a:[86]	b:[ ]
+a:[87]	b:[ ]
+a:[88]	b:[ ]
+a:[89]	b:[ ]
+a:[90]	b:[ ]
+a:[91]	b:[ ]
+a:[92]	b:[ ]
+a:[93]	b:[ ]
+a:[94]	b:[ ]
+a:[95]	b:[ ]
+a:[96]	b:[ ]
+a:[97]	b:[ ]
+a:[98]	b:[ ]
+a:[99]	b:[ ]
+-------		-------
+A = Size: 100	Min: 77	Max: 996
+B = Size: 0	Min: 0	Max: 0
