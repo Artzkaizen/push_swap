@@ -82,6 +82,8 @@ int	ft_printf(const char *str, ...)
 
 	i = 0;
 	c = 0;
+	c = 0;
+	c = 0;
 	va_start(args, str);
 	while (str[i])
 	{
