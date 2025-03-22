@@ -1,35 +1,35 @@
 #include "../includes/push_swap.h"
 
 
-t_bool is_sorted(t_stack *stack, t_sort_order order)
-{
-	t_node *next;
-	t_node *current;
+// t_bool is_sorted(t_stack *stack, t_sort_order order)
+// {
+// 	t_node *next;
+// 	t_node *current;
 
-	if (!stack)
-		return (FALSE);
-	current = stack->head;
-	if (!current)
-		return (FALSE);
-	while (current && current->next != stack->head)
-	{
-		next = current->next;
-		while (next)
-		{
-			if (order == ASCENDING && current->value > next->value)
-					return (FALSE);
-			else if(order == DESCENDING && current->value < next->value)
-				return (FALSE);
-			next = next->next;
-			if (next == stack->head)
-				break;
-		}
-		current = current->next;
-			if (current == stack->head)
-				break;
-	}
-	return (TRUE);
-}
+// 	if (!stack)
+// 		return (FALSE);
+// 	current = stack->head;
+// 	if (!current)
+// 		return (FALSE);
+// 	while (current && current->next != stack->head)
+// 	{
+// 		next = current->next;
+// 		while (next)
+// 		{
+// 			if (order == ASCENDING && current->value > next->value)
+// 					return (FALSE);
+// 			else if(order == DESCENDING && current->value < next->value)
+// 				return (FALSE);
+// 			next = next->next;
+// 			if (next == stack->head)
+// 				break;
+// 		}
+// 		current = current->next;
+// 			if (current == stack->head)
+// 				break;
+// 	}
+// 	return (TRUE);
+// }
 
 t_bool validate_stack(t_stack *stack)
 {
@@ -69,6 +69,7 @@ t_bool ft_add_node(t_node **list, int value, t_node *new)
     if (!new_node)
         return (FALSE);
     new_node->value = value;
+	new_node->orig = value;
     if (!*list)
     {
         *list = new_node;
@@ -120,7 +121,7 @@ t_bool fill_stack(t_stack *stack, char **str, int tab_size)
 		if (!ft_isnumeric(str[idx]))
 			return (free_stack(stack), FALSE);
 		tmp = ft_atol(str[idx]);
-		if (tmp > INT_MAX || tmp < INT_MIN)
+		if (tmp > INT_MAXi || tmp < INT_MINi)
 			return (free_stack(stack), FALSE);
 		if (!idx)
 			(stack->min = (int)tmp, stack->max = (int)tmp);

@@ -15,6 +15,7 @@ SRCS            := push_swap.c \
 				   ft_printf.c \
 				   ft_atoi.c \
 				   stack.c \
+				   stack_ops.c \
 				   ft_printf_utils.c \
 
 SRCS		:= $(SRCS:%=$(SRC_DIR)/%)

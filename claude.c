@@ -132,29 +132,17 @@ void rr(t_tabs *tabs) {
  * rra (reverse rotate a): Shift down all elements of stack a by 1.
  */
 void rra(t_tabs *tabs) {
-     if (tabs->a.size < 2 || !tabs->a.head) return;
-
-    t_node *current = tabs->a.head;
-    while(current->next != tabs->a.head) {
-        current = current->next;
-    }
-    tabs->a.head = current;
+    if (tabs->a.size < 2 || !tabs->a.head) return;
+    tabs->a.head = tabs->a.head->prev;
 }
 
 /*
  * rrb (reverse rotate b): Shift down all elements of stack b by 1.
  */
 void rrb(t_tabs *tabs) {
-     if (tabs->b.size < 2 || !tabs->b.head) return;
-
-    t_node *current = tabs->b.head;
-    while(current->next != tabs->b.head) {
-        current = current->next;
-    }
-    tabs->b.head = current;
+    if (tabs->b.size < 2 || !tabs->b.head) return;
+    tabs->b.head = tabs->b.head->prev;
 }
-
-
 
 /*
  * rrr : rra and rrb at the same time.
@@ -183,7 +171,6 @@ void move_stack(t_tabs *tabs, t_stack_move move) {
     }
 }
 
-
 /*
  * Check if the stack is sorted
  */
@@ -193,14 +180,15 @@ void move_stack(t_tabs *tabs, t_stack_move move) {
 //     t_node *current = stack->head;
 //     t_node *next = current->next;
 
-//     while (next != stack->head) {
+//     do {
 //         if (order == ASCENDING && current->value > next->value)
 //             return FALSE;
 //         else if (order == DESCENDING && current->value < next->value)
 //             return FALSE;
 //         current = next;
 //         next = next->next;
-//     }
+//     } while (next != stack->head);
+    
 //     return TRUE;
 // }
 
@@ -244,17 +232,14 @@ void merge(int *arr, int left, int mid, int right) {
     }
 }
 
-void mergeSort(int *arr, int left, int right);
-
 void mergeSort(int *arr, int left, int right) {
     if (left < right) {
         int mid = left + (right - left) / 2;
         mergeSort(arr, left, mid);
         mergeSort(arr, mid + 1, right);
-       merge(arr, left, mid, right);
+        merge(arr, left, mid, right);
     }
 }
-
 
 /*
  * Create a stack from a string array
@@ -264,13 +249,13 @@ t_tabs *create_tabs(char **str) {
     t_tabs *tabs = (t_tabs *)malloc(sizeof(t_tabs));
     if (!tabs) return NULL;
     tabs->a.head = NULL;
-	tabs->b.head = NULL;
+    tabs->b.head = NULL;
     tabs->a.size = 0;
-	tabs->b.size = 0;
+    tabs->b.size = 0;
     tabs->a.min = 0;
-	tabs->b.min = 0;
+    tabs->b.min = 0;
     tabs->a.max = 0;
-	tabs->b.max = 0;
+    tabs->b.max = 0;
     while (str[len]) len++;
     if (!(fill_stack(&tabs->a, str, len))) {
         free_tabs(tabs);
@@ -322,10 +307,10 @@ void print_tabs(t_tabs *tabs) {
  * Free the tabs
  */
 void free_tabs(t_tabs *tabs) {
-     if (!tabs) return;
-   free_stack(&tabs->a);
-   free_stack(&tabs->b);
-   free(tabs);
+    if (!tabs) return;
+    free_stack(&tabs->a);
+    free_stack(&tabs->b);
+    free(tabs);
 }
 
 /*
@@ -358,148 +343,157 @@ int get_max_bits(int max_num) {
     return max_bits;
 }
 
+// Function to sort 3 elements in stack A
+void sort_three(t_tabs *tabs) {
+    t_node *head = tabs->a.head;
+    int a = head->value;
+    int b = head->next->value;
+    int c = head->next->next->value;
+    
+    if (a > b && b < c && a < c)
+        move_and_print(tabs, SA);
+    else if (a > b && b > c) {
+        move_and_print(tabs, SA);
+        move_and_print(tabs, RRA);
+    }
+    else if (a > b && b < c && a > c)
+        move_and_print(tabs, RA);
+    else if (a < b && b > c && a < c) {
+        move_and_print(tabs, SA);
+        move_and_print(tabs, RA);
+    }
+    else if (a < b && b > c && a > c)
+        move_and_print(tabs, RRA);
+}
+
+/*
+ * Sort stacks with 5 or fewer elements
+ */
+void sort_small_stack(t_tabs *tabs) {
+    int size = tabs->a.size;
+    
+    if (size == 2 && tabs->a.head->value > tabs->a.head->next->value)
+        move_and_print(tabs, SA);
+    else if (size == 3) {
+        sort_three(tabs);
+    }
+    else if (size <= 5) {
+        // For 4 or 5 elements, push smallest to B until 3 remain
+        while (tabs->a.size > 3) {
+            // Find smallest element position
+            t_node *current = tabs->a.head;
+            int min_val = current->value;
+            int min_pos = 0;
+            int pos = 0;
+            
+            do {
+                if (current->value < min_val) {
+                    min_val = current->value;
+                    min_pos = pos;
+                }
+                current = current->next;
+                pos++;
+            } while (current != tabs->a.head);
+
+            // Rotate to position smallest element at top
+            if (min_pos <= tabs->a.size / 2) {
+                while (min_pos-- > 0)
+                    move_and_print(tabs, RA);
+            } else {
+                while (min_pos++ < tabs->a.size)
+                    move_and_print(tabs, RRA);
+            }
+            move_and_print(tabs, PB);
+        }
+
+        // Sort remaining 3 elements
+        sort_three(tabs);
+
+        // Push back elements from B
+        while (tabs->b.size > 0)
+            move_and_print(tabs, PA);
+    }
+}
+
 /*
  * Main sorting function using Radix Sort
  */
+
+
 void push_swap(t_tabs *tabs) {
     int size = tabs->a.size;
+    
+    // Check if already sorted or too small
     if (size <= 1 || is_sorted(&tabs->a, ASCENDING)) 
         return;
 
     // Handle small stacks efficiently
     if (size <= 5) {
-        if (size == 2 && tabs->a.head->value > tabs->a.head->next->value)
-            move_and_print(tabs, SA);
-        else if (size == 3) {
-            t_node *head = tabs->a.head;
-            int a = head->value;
-            int b = head->next->value;
-            int c = head->next->next->value;
-            if (a > b && b < c && a < c)
-                move_and_print(tabs, SA);
-            else if (a > b && b > c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RRA);
-            }
-            else if (a > b && b < c && a > c)
-                move_and_print(tabs, RA);
-            else if (a < b && b > c && a < c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RA);
-            }
-            else if (a < b && b > c && a > c)
-                move_and_print(tabs, RRA);
-        }
-        else if (size <= 5) {
-            // For 4 or 5 elements, push smallest to B until 3 remain
-            while (tabs->a.size > 3) {
-                // Find smallest element position
-                t_node *current = tabs->a.head;
-                int min_val = current->value;
-                int min_pos = 0;
-                int pos = 0;
-                
-                do {
-                    if (current->value < min_val) {
-                        min_val = current->value;
-                        min_pos = pos;
-                    }
-                    current = current->next;
-                    pos++;
-                } while (current != tabs->a.head);
-
-                // Rotate to position smallest element at top
-                if (min_pos <= tabs->a.size / 2) {
-                    while (min_pos-- > 0)
-                        move_and_print(tabs, RA);
-                } else {
-                    while (min_pos++ < tabs->a.size)
-                        move_and_print(tabs, RRA);
-                }
-                move_and_print(tabs, PB);
-            }
-
-            // Sort remaining 3 elements
-            t_node *head = tabs->a.head;
-            int a = head->value;
-            int b = head->next->value;
-            int c = head->next->next->value;
-            if (a > b && b < c && a < c)
-                move_and_print(tabs, SA);
-            else if (a > b && b > c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RRA);
-            }
-            else if (a > b && b < c && a > c)
-                move_and_print(tabs, RA);
-            else if (a < b && b > c && a < c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RA);
-            }
-            else if (a < b && b > c && a > c)
-                move_and_print(tabs, RRA);
-
-            // Push back elements from B
-            while (tabs->b.size > 0)
-                move_and_print(tabs, PA);
-        }
+        sort_small_stack(tabs);
         return;
     }
 
     // Normalize numbers (map to indices 0 to size-1)
-    int *arr = (int *)malloc(sizeof(int) * size);
+    int *values = (int *)malloc(sizeof(int) * size);
+    int *sorted = (int *)malloc(sizeof(int) * size);
+    
+    // Extract values
     t_node *current = tabs->a.head;
     for (int i = 0; i < size; i++) {
-        arr[i] = current->value;
+        values[i] = current->value;
+        sorted[i] = current->value;
         current = current->next;
     }
-
-    int *sorted_arr = (int *)malloc(sizeof(int) * size);
-    for (int i = 0; i < size; i++)
-        sorted_arr[i] = arr[i];
-    mergeSort(sorted_arr, 0, size - 1);
-
+    
+    // Sort the array
+    mergeSort(sorted, 0, size - 1);
+    
+    // Map original values to their positions in the sorted array
     current = tabs->a.head;
     for (int i = 0; i < size; i++) {
+        int value = current->value;
         for (int j = 0; j < size; j++) {
-            if (arr[i] == sorted_arr[j]) {
+            if (sorted[j] == value) {
+                // Count how many times this value has appeared before
+                int count = 0;
+                for (int k = 0; k < i; k++) {
+                    if (values[k] == value) {
+                        count++;
+                    }
+                }
+                
+                // Skip duplicates that have already been mapped
+                for (int k = 0; k < count && j < size - 1; k++) {
+                    if (sorted[j] == sorted[j + 1]) {
+                        j++;
+                    }
+                }
+                
                 current->value = j;
                 break;
             }
         }
         current = current->next;
     }
-    free(arr);
-    free(sorted_arr);
+    
+    free(values);
+    free(sorted);
 
-    // Simple and efficient radix sort implementation
+    // Perform radix sort using the normalized values
     int max_bits = get_max_bits(size - 1);
     
     for (int bit = 0; bit < max_bits; bit++) {
-        // Count numbers that will be pushed to B (for optimization)
-        int count_zeros = 0;
-        t_node *current = tabs->a.head;
-        for (int i = 0; i < tabs->a.size; i++) {
-            if (((current->value >> bit) & 1) == 0)
-                count_zeros++;
-            current = current->next;
-        }
-
-        // Early exit if no numbers need to be pushed
-        if (count_zeros == 0)
-            continue;
-
-        // Process current bit
-        int remaining = tabs->a.size;
-        while (remaining > 0) {
+        // Process all numbers in stack A
+        int initial_size = tabs->a.size;
+        for (int i = 0; i < initial_size; i++) {
+            // If bit is 0, push to B, otherwise rotate A
             if (((tabs->a.head->value >> bit) & 1) == 0) {
                 move_and_print(tabs, PB);
-            } else if (count_zeros < remaining) {
+            } else {
                 move_and_print(tabs, RA);
             }
-            remaining--;
         }
-
+        
         // Push all numbers back to A
         while (tabs->b.size > 0) {
             move_and_print(tabs, PA);
@@ -510,7 +504,7 @@ void push_swap(t_tabs *tabs) {
 int main(int argc, char **argv) {
     t_tabs *tabs;
 
-    ft_printf("THis is the new verision");
+    ft_printf("Push Swap Program\n");
     if (argc < 2)
         return (0);
     tabs = create_tabs(argv + 1);
@@ -518,11 +512,10 @@ int main(int argc, char **argv) {
         return (0);
     print_tabs(tabs);
     g_move_count = 0;  // Reset move count
-    push_swap(tabs); // Call push_swap
+    push_swap(tabs);   // Call push_swap
     ft_printf("Total moves: %d\n", g_move_count);
     print_tabs(tabs);
 
     free_tabs(tabs);
     return (0);
 }
-

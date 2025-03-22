@@ -7,8 +7,8 @@
 
 #define TRUE 1
 #define FALSE 0
-#define INT_MAX 2147483647
-#define INT_MIN -2147483648
+#define INT_MAXi 2147483647
+#define INT_MINi -2147483648
 
 
 #define ADD_BACK 0
@@ -42,6 +42,7 @@ typedef enum e_stack_move
 typedef struct s_node
 {
 	int value;
+    int orig;
 	struct s_node *next;
 	struct s_node *prev;
 } t_node;
