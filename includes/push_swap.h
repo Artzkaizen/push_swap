@@ -117,4 +117,10 @@ void push_swap(t_tabs *tabs);
 void print_tabs(t_tabs *tabs);
 void free_tabs(t_tabs *tabs);
 
+void chunk_sort(t_tabs *tabs);
+void radix_sort(t_tabs *tabs);
+int find_closest_in_range(t_stack stack, int min, int max);
+int find_max_position(t_stack stack);
+int compare_ints(const void *a, const void *b);
+
 #endif //PUSH_SWAP_H

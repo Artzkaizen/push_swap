@@ -363,147 +363,162 @@ int get_max_bits(int max_num) {
  */
 void push_swap(t_tabs *tabs) {
     int size = tabs->a.size;
+    
+    // Check if already sorted or too small
     if (size <= 1 || is_sorted(&tabs->a, ASCENDING)) 
         return;
 
     // Handle small stacks efficiently
     if (size <= 5) {
-        if (size == 2 && tabs->a.head->value > tabs->a.head->next->value)
-            move_and_print(tabs, SA);
-        else if (size == 3) {
-            t_node *head = tabs->a.head;
-            int a = head->value;
-            int b = head->next->value;
-            int c = head->next->next->value;
-            if (a > b && b < c && a < c)
-                move_and_print(tabs, SA);
-            else if (a > b && b > c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RRA);
-            }
-            else if (a > b && b < c && a > c)
-                move_and_print(tabs, RA);
-            else if (a < b && b > c && a < c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RA);
-            }
-            else if (a < b && b > c && a > c)
-                move_and_print(tabs, RRA);
-        }
-        else if (size <= 5) {
-            // For 4 or 5 elements, push smallest to B until 3 remain
-            while (tabs->a.size > 3) {
-                // Find smallest element position
-                t_node *current = tabs->a.head;
-                int min_val = current->value;
-                int min_pos = 0;
-                int pos = 0;
-                
-                do {
-                    if (current->value < min_val) {
-                        min_val = current->value;
-                        min_pos = pos;
-                    }
-                    current = current->next;
-                    pos++;
-                } while (current != tabs->a.head);
-
-                // Rotate to position smallest element at top
-                if (min_pos <= tabs->a.size / 2) {
-                    while (min_pos-- > 0)
-                        move_and_print(tabs, RA);
-                } else {
-                    while (min_pos++ < tabs->a.size)
-                        move_and_print(tabs, RRA);
-                }
-                move_and_print(tabs, PB);
-            }
-
-            // Sort remaining 3 elements
-            t_node *head = tabs->a.head;
-            int a = head->value;
-            int b = head->next->value;
-            int c = head->next->next->value;
-            if (a > b && b < c && a < c)
-                move_and_print(tabs, SA);
-            else if (a > b && b > c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RRA);
-            }
-            else if (a > b && b < c && a > c)
-                move_and_print(tabs, RA);
-            else if (a < b && b > c && a < c) {
-                move_and_print(tabs, SA);
-                move_and_print(tabs, RA);
-            }
-            else if (a < b && b > c && a > c)
-                move_and_print(tabs, RRA);
-
-            // Push back elements from B
-            while (tabs->b.size > 0)
-                move_and_print(tabs, PA);
-        }
+        sort_small_stack(tabs);
         return;
     }
 
-    // Normalize numbers (map to indices 0 to size-1)
-    int *arr = (int *)malloc(sizeof(int) * size);
+    // Normalize numbers
+    int *values = malloc(sizeof(int) * size);
+    int *sorted = malloc(sizeof(int) * size);
     t_node *current = tabs->a.head;
+    
+    // Copy values
     for (int i = 0; i < size; i++) {
-        arr[i] = current->value;
+        values[i] = current->orig;
+        sorted[i] = current->orig;
         current = current->next;
     }
 
-    int *sorted_arr = (int *)malloc(sizeof(int) * size);
-    for (int i = 0; i < size; i++)
-        sorted_arr[i] = arr[i];
-    mergeSort(sorted_arr, 0, size - 1);
-
+    // Sort array to get position mapping
+    qsort(sorted, size, sizeof(int), compare_ints);
+    
+    // Create position mapping
     current = tabs->a.head;
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            if (arr[i] == sorted_arr[j]) {
-                current->value = j;
+    while (current) {
+        for (int i = 0; i < size; i++) {
+            if (current->orig == sorted[i]) {
+                current->value = i;
                 break;
             }
         }
         current = current->next;
     }
-    free(arr);
-    free(sorted_arr);
 
-    // Simple and efficient radix sort implementation
-    int max_bits = get_max_bits(size - 1);
-    
-    for (int bit = 0; bit < max_bits; bit++) {
-        // Count numbers that will be pushed to B (for optimization)
-        int count_zeros = 0;
+    free(values);
+    free(sorted);
+
+    // For 100 numbers, use chunk sort
+    if (size <= 100) {
+        chunk_sort(tabs);
+    } else {
+        // For larger sizes, use radix sort
+        radix_sort(tabs);
+    }
+}
+
+void chunk_sort(t_tabs *tabs) {
+    int size = tabs->a.size;
+    int chunk_size = size / 5;  // Split into 5 chunks for 100 numbers
+    int min = 0;
+    int max = chunk_size;
+
+    // Push numbers to B in chunks, smallest first
+    while (tabs->a.size > 0) {
         t_node *current = tabs->a.head;
-        for (int i = 0; i < tabs->a.size; i++) {
-            if (((current->value >> bit) & 1) == 0)
-                count_zeros++;
-            current = current->next;
-        }
-
-        // Early exit if no numbers need to be pushed
-        if (count_zeros == 0)
+        int closest_pos = find_closest_in_range(tabs->a, min, max);
+        
+        if (closest_pos == -1) {
+            min += chunk_size;
+            max += chunk_size;
             continue;
+        }
 
-        // Process current bit
-        int remaining = tabs->a.size;
-        while (remaining > 0) {
-            if (((tabs->a.head->value >> bit) & 1) == 0) {
-                move_and_print(tabs, PB);
-            } else if (count_zeros < remaining) {
+        // Rotate to the closest number in current chunk
+        if (closest_pos <= tabs->a.size / 2) {
+            while (closest_pos-- > 0)
                 move_and_print(tabs, RA);
-            }
-            remaining--;
+        } else {
+            while (closest_pos++ < tabs->a.size)
+                move_and_print(tabs, RRA);
         }
+        
+        move_and_print(tabs, PB);
+    }
 
-        // Push all numbers back to A
-        while (tabs->b.size > 0) {
-            move_and_print(tabs, PA);
+    // Push back to A in descending order
+    while (tabs->b.size > 0) {
+        int max_pos = find_max_position(tabs->b);
+        
+        if (max_pos <= tabs->b.size / 2) {
+            while (max_pos-- > 0)
+                move_and_print(tabs, RB);
+        } else {
+            while (max_pos++ < tabs->b.size)
+                move_and_print(tabs, RRB);
         }
+        
+        move_and_print(tabs, PA);
+    }
+}
+
+int find_closest_in_range(t_stack stack, int min, int max) {
+    int closest_pos = -1;
+    int i = 0;
+    t_node *current = stack.head;
+
+    while (current) {
+        if (current->value >= min && current->value < max) {
+            closest_pos = i;
+            break;
+        }
+        current = current->next;
+        i++;
+    }
+
+    return closest_pos;
+}
+
+int find_max_position(t_stack stack) {
+    int max_val = -1;
+    int max_pos = 0;
+    int curr_pos = 0;
+    t_node *current = stack.head;
+
+    while (current) {
+        if (current->value > max_val) {
+            max_val = current->value;
+            max_pos = curr_pos;
+        }
+        current = current->next;
+        curr_pos++;
+    }
+
+    return max_pos;
+}
+
+// Helper function for qsort
+int compare_ints(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+void radix_sort(t_tabs *tabs) {
+    int max_bits = 0;
+    int size = tabs->a.size;
+    int max_num = size - 1;  // After normalization, largest number is size-1
+    
+    // Calculate number of bits needed
+    while ((max_num >> max_bits) != 0)
+        max_bits++;
+
+    // Sort by each bit
+    for (int bit = 0; bit < max_bits; bit++) {
+        for (int i = 0; i < size; i++) {
+            if (((tabs->a.head->value >> bit) & 1) == 0)
+                move_and_print(tabs, PB);
+            else
+                move_and_print(tabs, RA);
+        }
+        
+        // Push all numbers back to A
+        while (tabs->b.size > 0)
+            move_and_print(tabs, PA);
     }
 }
 
