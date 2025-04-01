@@ -1,5 +1,7 @@
+// File: ps_chunk_helpers2.c
 #include "push_swap.h"
 
+// set_third_pivots_by_value - unchanged, already compliant
 void set_third_pivots_by_value(t_chunk *chunk, int min_val, int max_val,
                                int *pivot1_val, int *pivot2_val)
 {
@@ -31,6 +33,7 @@ void set_third_pivots_by_value(t_chunk *chunk, int min_val, int max_val,
     }
 }
 
+// set_split_loc - unchanged, already compliant
 void set_split_loc(t_loc loc, t_chunk *min, t_chunk *mid, t_chunk *max)
 {
     if (loc == TOP_A || loc == BOTTOM_A)
@@ -56,74 +59,41 @@ void set_split_loc(t_loc loc, t_chunk *min, t_chunk *mid, t_chunk *max)
     }
 }
 
+// a_partly_sort - unchanged, already compliant
 t_bool a_partly_sort(t_tabs *data, int from_top_count)
 {
     t_stack *a;
     t_node *current;
-    t_node *runner;
-    int expected_value;
     int i;
 
     a = &data->a;
     if (!a->head || a->size < 2 || from_top_count > a->size)
         return (TRUE);
     if (from_top_count <= 1)
-    {
-        current = a->head;
-        expected_value = current->value;
-        runner = current->next;
-        while (runner != a->head)
-        {
-            expected_value++;
-            if (runner->value != expected_value)
-                return (FALSE);
-            runner = runner->next;
-        }
-        return (TRUE);
-    }
+        return (check_partial_sort_loop(a->head, a->head));
     current = a->head;
     i = 1;
     while (i < from_top_count)
     {
+        if (!current)
+            return (FALSE);
         current = current->next;
         i++;
     }
-    expected_value = current->value;
-    runner = current->next;
-    while (runner != a->head)
-    {
-        expected_value++;
-        if (runner->value != expected_value)
-            return (FALSE);
-        runner = runner->next;
-    }
-    return (TRUE);
+    return (check_partial_sort_loop(current, a->head));
 }
 
+// split_max_reduction - unchanged, calls helpers now, already compliant
 void split_max_reduction(t_tabs *data, t_chunk *max_chunk_dest)
 {
-    t_stack *a;
-    int v0, v1, v2;
-    int total_size;
-    int n_m1, n_m2, n_m3; // Shorter names
-    t_bool top_3_max;
-    t_chunk temp_chunk;
+    t_chunk temp_chunk; // Only 1 variable + params
 
-    a = &data->a;
     if (max_chunk_dest->loc != TOP_A)
         return;
-    if (max_chunk_dest->size >= 3 && a->size >= 3)
+
+    if (max_chunk_dest->size >= 3 && data->a.size >= 3)
     {
-        v0 = a->head->value;
-        v1 = a->head->next->value;
-        v2 = a->head->next->next->value;
-        total_size = data->a.size + data->b.size;
-        n_m1 = total_size - 1;
-        n_m2 = total_size - 2;
-        n_m3 = total_size - 3;
-        top_3_max = ((v0 == n_m1 || v0 == n_m2 || v0 == n_m3) && (v1 == n_m1 || v1 == n_m2 || v1 == n_m3) &&
-                     (v2 == n_m1 || v2 == n_m2 || v2 == n_m3) && (v0 != v1 && v0 != v2 && v1 != v2));
-        if (top_3_max == TRUE && a_partly_sort(data, 4) == TRUE)
+        if (check_reduce_cond1(data) == TRUE)
         {
             temp_chunk.loc = TOP_A;
             temp_chunk.size = 3;
@@ -132,25 +102,21 @@ void split_max_reduction(t_tabs *data, t_chunk *max_chunk_dest)
             return;
         }
     }
-    if (max_chunk_dest->size >= 1 && a->size >= 3)
+    if (max_chunk_dest->size >= 1 && data->a.size >= 3)
     {
-        if (a->head->next->value == a->head->next->next->value - 1 &&
-            a->head->value > a->head->next->value && a_partly_sort(data, 3) == TRUE)
+        if (check_reduce_cond2(data) == TRUE)
         {
             move_and_print(data, SA);
             max_chunk_dest->size--;
             return;
         }
     }
-    if (max_chunk_dest->size >= 1 && a->size >= 1)
+    if (max_chunk_dest->size >= 1 && data->a.size >= 1)
     {
-        if (a_partly_sort(data, 2) == TRUE)
+        if (check_reduce_cond3(data) == TRUE)
         {
-            if (a->size == 1 || (a->size > 1 && a->head->value == a->head->next->value - 1))
-            {
-                max_chunk_dest->size--;
-                return;
-            }
+            max_chunk_dest->size--;
+            return;
         }
     }
 }
